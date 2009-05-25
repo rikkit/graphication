@@ -671,6 +671,7 @@ class CssImporter(object):
 	def find_module(self, fullname, path=None):
 		
 		name = fullname.split('.')[-1]
+		pathparts = fullname.split(".")[:-1]
 		if name[-4:] == "_css":
 			name = name[:-4]
 		
@@ -682,6 +683,8 @@ class CssImporter(object):
 		# Search 'em
 		for path in paths:
 			path = abspath(path)
+			for part in pathparts:
+				path = os.path.join(path, part)
 			if isdir(path):
 				path = join(path, name)
 				for ext in self.exts:
