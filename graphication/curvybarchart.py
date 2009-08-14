@@ -181,7 +181,7 @@ class CurvyBarChart(BarChart):
 				linear = cairo.LinearGradient(0, self.plot_height - height, 0, self.plot_height)
 				prog = 1
 				for series, svalue in stack:
-					if svalue:
+					if svalue and value:
 						pc = svalue / float(value)
 						linear.add_color_stop_rgba(prog,  *series.color_as_rgba())
 						prog -= pc
@@ -227,10 +227,16 @@ class CurvyBarChart(BarChart):
 			cx = x + w/2.0
 			for label in labels:
 				context.set_font_size(size)
-				x_bearing, y_bearing, width, height = context.text_extents(label)[:4]
+				
+				sizes = (0,0,0,0)
+				if label:
+					sizes = context.text_extents(label)[:4]
+				x_bearing, y_bearing, width, height = sizes
+				
 				context.move_to(cx - width / 2 - x_bearing, by)
 				context.set_source_rgba(*label_style.get_color('color'))
-				context.show_text(label)
+				if label:
+					context.show_text(label)
 				context.fill()
 				by += bh
 			
