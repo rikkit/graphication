@@ -155,6 +155,10 @@ class LineGraph(object):
 		smooth = self.style['linegraph line'].get_float("smoothness", 0.5)
 		y_size = self.style['linegraph'].get_align("height", 1)
 		
+		# Make sure we clip to the region so we can't draw over the edge.
+		context.rectangle(0, 0, self.width, self.plot_height)
+		context.clip()
+		
 		for series in self.series_set:
 			
 			# Get the line's points
@@ -253,32 +257,34 @@ class LineGraph(object):
 				context.stroke()
 			
 			# Draw the line
-			prev_style = series.style_at(0)
-			last_change = 0
-			context.move_to(*points[0])
-			for j in range(1, len(points)):
-				# Get the drawstyle for this coord
-				draw_style = series.style_at(xs[j])
+			if points:
+				prev_style = series.style_at(0)
+				last_change = 0
+				context.move_to(*points[0])
+				for j in range(1, len(points)):
+					# Get the drawstyle for this coord
+					draw_style = series.style_at(xs[j])
+					
+					ox, oy = points[j-1]
+					nx, ny = points[j]
+					
+					dx = (nx - ox) * smooth
+					if self.smoothed:
+						context.curve_to(ox+dx, oy, nx-dx, ny, nx, ny)
+					else:
+						context.line_to(nx, ny)
+					
+					# If we have a new draw style, we need to end this segment and begin another
+					if draw_style != prev_style:
+						stroke(nx, last_change)
+						prev_style = draw_style
+						context.move_to(*points[j])
+						last_change = nx
 				
-				ox, oy = points[j-1]
-				nx, ny = points[j]
-				
-				dx = (nx - ox) * smooth
-				if self.smoothed:
-					context.curve_to(ox+dx, oy, nx-dx, ny, nx, ny)
-				else:
-					context.line_to(nx, ny)
-				
-				# If we have a new draw style, we need to end this segment and begin another
-				if draw_style != prev_style:
-					stroke(nx, last_change)
-					prev_style = draw_style
-					context.move_to(*points[j])
-					last_change = nx
-			
-			# Now close the line overall
-			stroke(nx, last_change)
+				# Now close the line overall
+				stroke(nx, last_change)
 		
+		context.reset_clip()
 		context.restore()
 
 
