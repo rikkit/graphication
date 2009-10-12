@@ -10,7 +10,11 @@ import time
 try:
 	import cElementTree as ET
 except:
-	import elementtree.ElementTree as ET
+	# ElementTree could be in two places...
+	try:
+		import xml.etree.ElementTree as ET
+	except ImportError:
+		import elementtree.ElementTree as ET
 
 # The directory to use to cache downloaded xml
 cachedir = "/var/tmp/lastfm/"
