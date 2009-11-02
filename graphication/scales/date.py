@@ -146,6 +146,7 @@ class AutoDateScale(DateScale):
 		self.min, self.max = map(d_to_timestamp, series_set.key_range())
 		self.range = float(self.max - self.min)
 		self.padding = 0
+		self.highlight_weekends = False
 		
 		if step is None:
 			step = 86400 * 7
@@ -198,6 +199,7 @@ class AutoWeekDateScale(DateScale):
 		self.range = float(self.max - self.min)
 		self.short_labels = short_labels
 		self.month_gap = month_gap
+		self.highlight_weekends = False
 	
 	
 	def get_lines(self):
