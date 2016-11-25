@@ -1,13 +1,14 @@
 Graphication
 ============
 
-In a quest to make new and better code for LastGraph, I decided to make it more
-generic and accessible for anyone to use, and so here we have Graphication.
+> In a quest to make new and better code for LastGraph, I decided to make it more
+> generic and accessible for anyone to use, and so here we have Graphication.
 
-It uses Cairo for rendering, and is designed to be (somewhat) modular and
-expandable. Early releases only do wavegraphs, but hopefully this will improve
-as time goes on.
+> It uses Cairo for rendering, and is designed to be (somewhat) modular and
+> expandable. Early releases only do wavegraphs, but hopefully this will improve
+> as time goes on.
 
+\- Andrew Godwin
 
 Requirements
 ============
